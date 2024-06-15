@@ -1,0 +1,46 @@
+import numpy as np 
+import pandas as pd
+from matplotlib import pyplot
+
+dataset = pd.read_csv("/content/Housing.csv")
+
+x = dataset[["area",	"bedrooms" ,"bathrooms"]]
+y = dataset[["price"]]
+
+from sklearn.model_selection import train_test_split  
+x_tr,x_te,y_tr,y_te = train_test_split(x,y,test_size = 0.2,random_state = 42)
+
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Initialize the model
+model = LinearRegression()
+
+# Train the model
+model.fit(x_tr, y_tr)
+
+# Make predictions
+y_pred = model.predict(x_te)
+
+# Evaluate the model
+mse = mean_squared_error(y_te, y_pred)
+r2 = r2_score(y_te, y_pred)
+
+print(f'Mean Squared Error: {mse}')
+print(f'R^2 Score: {r2}')
+
+# New data for prediction
+new_data = pd.DataFrame({
+    'SquareFootage': [2000, 2300],
+    'Bedrooms': [3, 4],
+    'Bathrooms': [2, 3]
+})
+
+# Predict prices
+new_predictions = model.predict(new_data)
+print(new_predictions)
+
+output:
+Mean Squared Error: 2750040479309.0522
+R^2 Score: 0.4559299118872445
+[383571.42857143 474642.85714286]
